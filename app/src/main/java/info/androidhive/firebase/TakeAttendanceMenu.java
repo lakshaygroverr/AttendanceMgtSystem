@@ -1,5 +1,6 @@
 package info.androidhive.firebase;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,9 +16,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ViewParent;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -37,7 +40,7 @@ import com.google.firebase.database.FirebaseDatabase;
 */
 
 
-public class TakeAttendanceMenu extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class TakeAttendanceMenu extends AppCompatActivity implements OnItemSelectedListener{
 
     /*final FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference ref = database.getReference("Courses");*/
@@ -72,6 +75,7 @@ public class TakeAttendanceMenu extends AppCompatActivity implements AdapterView
                                 semSpinnerList.add(document.getId());
                             }
                         }
+                        Toast.makeText(getApplicationContext(), "Please chal ja bc", Toast.LENGTH_SHORT).show();
                     }
 });
     }
@@ -91,16 +95,13 @@ public class TakeAttendanceMenu extends AppCompatActivity implements AdapterView
         });
     }
 
-    /*
-
-    ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+/*    ArrayAdapter<String> adapter = new ArrayAdapter<String>(
             this, android.R.layout.simple_spinner_item, spinnerArray);
 
 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     Spinner sItems = (Spinner) findViewById(R.id.spinner1);
-sItems.setAdapter(adapter);*/
+sItems.setAdapter(adapter);
 
-    /*
     // Create an ArrayAdapter using the string array and a default spinner layout
     ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
             R.array.planets_array, android.R.layout.simple_spinner_item);
@@ -129,7 +130,7 @@ spinner.setAdapter(adapter);*/
             }
         }
         );
-        getAllSemesters();
+        getAllSemesters(); // calling this method to instantiate the first spinner(semester spinner) with the values of firestore
 
         ArrayAdapter<String> semAdapter= new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, semSpinnerList);
@@ -137,57 +138,43 @@ spinner.setAdapter(adapter);*/
         semSpinner.setAdapter(semAdapter);
         semSpinner.setOnItemSelectedListener(this);
 
-
-        //selectedSem = semSpinner.getSelectedItem().toString();
-
-        /*getSemesterClasses();
-        ArrayAdapter<String> classAdapter= new ArrayAdapter<String>(
-                this, android.R.layout.simple_spinner_item, ClassSpinnerList);
-        classAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        classSpinner.setAdapter(classAdapter);*/
-
-       /* semSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                Log.d(TAG,"please select an option");
-            }
-        });*/
-
-
-        /*semSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
-            @Override
-            public void onItemSelected(AdapterView<?>parent,View selectedItemView, int position, long id){
-                selectedSem = (String)parent.getItemAtPosition(position);
-                getSemesterClasses();
-                Log.d(TAG,"hey");
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView)
-            {
-                Toast.makeText(TakeAttendanceMenu.this, "Please select the Class", Toast.LENGTH_LONG).show();
-            }
-        });*/
-
+        /*Adapter for the Semester -> Class*/
         ArrayAdapter<String> classAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,ClassSpinnerList);
         classAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         classSpinner.setAdapter(classAdapter);
+        classSpinner.setOnItemSelectedListener(this);
     }
+
 
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int i, long l) {
-        String randValue = parent.getItemAtPosition(i).toString();
-        Toast.makeText(this,randValue,Toast.LENGTH_LONG).show();
+    public void onItemSelected(AdapterView<?> parent, View view,
+                               int position, long id) {
+        switch (view.getId()) {
+
+            case R.id.semester_spinner:
+                Toast.makeText(this, "Item Selected "+position, Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.class_spinner:
+                Toast.makeText(this, "Item Selected "+position, Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.subject_spinner:
+                Toast.makeText(this, "Item Selected "+position, Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.time_spinner:
+                Toast.makeText(this, "Item Selected "+position, Toast.LENGTH_SHORT).show();
+                break;
+
+            default:
+                break;
+        }
     }
 
-    @Override   
-    public void onNothingSelected(AdapterView<?> adapterView) {
-        Log.d(TAG,"Yo baby");
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        Toast.makeText(getApplicationContext(), "Nothing has been selected", Toast.LENGTH_SHORT).show();
     }
 }
